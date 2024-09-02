@@ -1,5 +1,6 @@
 require("dotenv").config()
 require("./src/routes/RotaFuncinario")
+require("./src/config/dabase")
 const app = require("./src/app")
 const http = require("http")
 const port = process.env.PORT || 3000
