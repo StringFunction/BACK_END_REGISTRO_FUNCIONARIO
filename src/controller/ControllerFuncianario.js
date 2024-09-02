@@ -2,6 +2,7 @@ const express = require("express")
 const Router = express.Router()
 const fs = require('fs')
 const dados = require("../dados.json")
+const modelFunc = require("../models/ModelFuncionario")
 //RETORNA FUNCIONARIO COM MATRICULA PASSADA
 Router.get("/user", (req,res) =>{
   const matricula = req.body.matricula
