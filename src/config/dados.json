@@ -1,0 +1,33 @@
+{
+  "dados": [
+    {
+      "id": "01",
+      "nome": "francisco clecio",
+      "setor": "escravido"
+    },
+    {
+      "id": "01",
+      "matricula": "1234",
+      "nome": "chuchu",
+      "setor": "escravo"
+    },
+    {
+      "id": "01",
+      "matricula": "1234",
+      "nome": "chuchu",
+      "setor": "escravo"
+    },
+    {
+      "id": "01",
+      "matricula": "1234",
+      "nome": "chuchu",
+      "setor": "escravo"
+    },
+    {
+      "id": "01",
+      "matricula": "1234",
+      "nome": "chuchu",
+      "setor": "escravo"
+    }
+  ]
+}
