@@ -1,33 +1,12 @@
 {
   "dados": [
     {
-      "id": "01",
-      "nome": "francisco clecio",
-      "setor": "escravido"
-    },
-    {
-      "id": "01",
-      "matricula": "1234",
-      "nome": "chuchu",
-      "setor": "escravo"
-    },
-    {
-      "id": "01",
-      "matricula": "1234",
-      "nome": "chuchu",
-      "setor": "escravo"
-    },
-    {
-      "id": "01",
-      "matricula": "1234",
-      "nome": "chuchu",
-      "setor": "escravo"
-    },
-    {
-      "id": "01",
-      "matricula": "1234",
-      "nome": "chuchu",
-      "setor": "escravo"
+     "matricula" : "123456",
+     "nome" : "Clecio",
+     "setor" : "Automocao",
+     "cargo" : "sei la",
+     "senha" : "12345"
     }
+    
   ]
 }

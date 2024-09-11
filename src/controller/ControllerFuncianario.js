@@ -38,6 +38,21 @@ Router.post("/user", async (req,res) =>{
   })
 
 Router.get("/user/:matricula", async(req, res) =>{
+  let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+  const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
+  if (!!resultado) {
+    res.status(200).send(resultado)
+    
+  } else{
+    res.status(401).send("usuario n encontrado")
+
+  }
+
+
+})
+  
+Router.get("/user/:matricula", async(req, res) =>{
+  let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
   if (!!resultado) {
     res.status(200).send(resultado)

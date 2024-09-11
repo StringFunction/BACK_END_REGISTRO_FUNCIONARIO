@@ -1,1 +1,1 @@
-require("./ModelFuncionario")
+// require("./ModelFuncionario")
