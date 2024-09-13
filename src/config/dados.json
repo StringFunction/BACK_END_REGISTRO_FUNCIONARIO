@@ -1,12 +1,19 @@
 {
   "dados": [
     {
-     "matricula" : "123456",
-     "nome" : "Clecio",
-     "setor" : "Automocao",
-     "cargo" : "sei la",
-     "senha" : "12345"
+      "id": "01",
+      "matricula": "12345",
+      "nome": "chuchu",
+      "setor": "escravo"
+    },
+    {
+      "maquina": "maquina do secesso"
+    },
+    {
+      "maquina": "maquina do secesso"
+    },
+    {
+      "maquina": "maquina do secesso"
     }
-    
   ]
 }

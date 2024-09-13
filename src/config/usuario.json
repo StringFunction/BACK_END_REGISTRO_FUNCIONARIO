@@ -1,0 +1,5 @@
+{
+    "usuarios" : [
+        {"matricula" : "123456", "nome" : "clecio", "senha" : "12345", "nivel" : "2"}
+    ]
+}
