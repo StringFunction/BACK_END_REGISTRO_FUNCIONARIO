@@ -3,7 +3,8 @@ const Router = express.Router()
 const fs = require('fs')
 // const registro = require("../dados.json")
 const modelFunc = require("../models/ModelFuncionario")
-const caminho = "./src/config/dados.json"
+const caminho = "./src/config/funcionario.json"
+
 
 //RETORNA FUNCIONARIO COM MATRICULA PASSADA
 const  gravar = async (infor) =>{
@@ -20,6 +21,8 @@ const  gravar = async (infor) =>{
 
 
 }
+
+
 
 
 
@@ -41,7 +44,7 @@ Router.post("/user", async (req,res) =>{
   
 Router.get("/user/:matricula", async(req, res) =>{
   let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
-  const resultado = registro.dados.find((e) => e.matricula == req)
+  const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
   if (!!resultado) {
     res.status(200).send(resultado)
     
@@ -103,7 +106,7 @@ Router.delete("/user", async(req, res) => {
 }
   
 })
-Router.delete("user")
+
   
 
 module.exports = Router

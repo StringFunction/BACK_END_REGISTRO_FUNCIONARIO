@@ -1,5 +1,17 @@
 {
-    "usuarios" : [
-        {"matricula" : "123456", "nome" : "clecio", "senha" : "12345", "nivel" : "2"}
-    ]
+  "usuarios": [
+    {
+      "matricula": "123456",
+      "nome": "clecio",
+      "senha": "12345",
+      "nivel": "2"
+    },
+    {
+      "matricula" :"147741",
+      "nome" : "maquinadosucesso",
+      "senha" : "123",
+      "setor" : "teste",
+      "nivel" : "1"
+    }
+  ]
 }

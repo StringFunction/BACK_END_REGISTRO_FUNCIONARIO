@@ -1,8 +1,8 @@
 const app = require("../app")
-const Consulta = require("../controller/ControllerFuncianario")
+const Consulta = require("../controller/ControllerUsuarioSistema")
+const fs = require("fs")
 const jwt = require("jsonwebtoken")
 const caminho = "./src/config/lista_negraToken.json"
-const fs = require("fs")
 
 
 
@@ -23,4 +23,4 @@ const fs = require("fs")
   }
 
 
-app.use("/v1/funcionario", vericarToken, Consulta)
+app.use("/v1/usuario", vericarToken, Consulta)
