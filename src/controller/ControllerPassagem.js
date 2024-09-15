@@ -14,6 +14,8 @@ const  gravaPassagem = async (infor) =>{
     fs.writeFileSync(caminhoPassagem, JSON.stringify(registro, null, 2), 'utf-8');
     return (registro.passagens)
 }
+//REGISRA A PASSAGEM DO FUNCINARIO
+
 Router.post("/Registro", async(req,res) =>{
   try{
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));

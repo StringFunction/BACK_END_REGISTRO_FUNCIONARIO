@@ -2,7 +2,7 @@ const usuario = require("../models/ModelUsuario")
 const express = require("express")
 const rota = express.Router()
 
-
+//CONSULTA USUARIO COM BASE NA MATRICULA
 rota.get("/user/:matricula", async(req, res) => {
     if(["3"].includes(req.nivel)){
         usuario.findOne({where : {matricula : req.params.matricula}}).then((e) =>{
@@ -28,6 +28,8 @@ rota.get("/user/:matricula", async(req, res) => {
 
 })
 
+
+//RETORNA TODOS OS USUARIO DO BANCO 
 rota.get("/user", async(req, res) => {
     if(["3"].includes(req.nivel)){
         usuario.findAll().then((e) =>{
@@ -45,6 +47,8 @@ rota.get("/user", async(req, res) => {
     }
 
 })
+
+//CRIA UM NOVO USUARIO
 rota.post("/user", async (req, res) =>{
     const response = await usuario.create(req.body)
     console.log(req.nivel);
@@ -63,6 +67,8 @@ rota.post("/user", async (req, res) =>{
     }
    
 })
+
+//DELATA USUARIO DE ACORDO COM MATRICULA
 rota.delete("/user/:matricula", async(req,res) => {
     try{
         const user =  await usuario.findOne({where : {
@@ -86,6 +92,8 @@ rota.delete("/user/:matricula", async(req,res) => {
         return res.status(401).send({mensagem : "erro no servidor "})
     }
 })
+
+//ATUALIZA USUARIO DE ACORDO COMM MATRICULA
 rota.put("/user/:matricula", async(req,res) => {
     try{
         const user =  await usuario.findOne({where : {
@@ -110,4 +118,4 @@ rota.put("/user/:matricula", async(req,res) => {
     }
 })
 
-module.exports = rota
+module.exports = rota  

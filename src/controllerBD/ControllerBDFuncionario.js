@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const modelFunc = require("../models/ModelFuncionario"); // Importa o modelo do funcionário
+const { where } = require("sequelize");
 
 // Função para gravar um novo funcionário no banco de dados
 const gravar = async (infor) => {
@@ -55,7 +56,7 @@ Router.put("/user", async (req, res) => {
       });
       
       if (!!funcionario) {
-        await funcionario.update(req.body); // Atualiza os dados no banco
+        await funcionario.update(req.body, {where : { matricula : req.body.matricula}}); // Atualiza os dados no banco
         res.status(200).send(funcionario);
       } else {
         res.status(404).send({ mensagem: "Usuário não encontrado" });
