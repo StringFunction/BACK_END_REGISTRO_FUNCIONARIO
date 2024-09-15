@@ -2,13 +2,10 @@ const express = require("express")
 const Router = express.Router()
 const fs = require("fs")
 const jwt = require("jsonwebtoken")
-const { response } = require("../app")
-const { json } = require("sequelize")
-const { log } = require("console")
 const caminho = "./src/config/usuario.json"
 const caminha_lista_negra = "./src/config/lista_negraToken.json"
 
-
+//FUNCAO PARA GRAVA TOKEN INVALIDOS
 const  grava_token_na_lista_negra = async (infor) =>{
     try{
     let registro = await JSON.parse(fs.readFileSync(caminha_lista_negra, 'utf-8'));
@@ -23,6 +20,7 @@ const  grava_token_na_lista_negra = async (infor) =>{
   
   
   }
+//AUTENTICACAO 
 Router.post("/user", async (req, res) =>{
     try{
         const response = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
@@ -45,7 +43,7 @@ Router.post("/user", async (req, res) =>{
 
     
 })
-
+//DESLOGAR E REGISTRA TOKEN 
 Router.post("/logaut",  async (req, res) =>{
     const token = req.headers["x-access-token"]
     const response = await grava_token_na_lista_negra(token)

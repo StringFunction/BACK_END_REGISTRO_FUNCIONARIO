@@ -6,7 +6,7 @@ const modelFunc = require("../models/ModelFuncionario")
 const caminho = "./src/config/funcionario.json"
 
 
-//RETORNA FUNCIONARIO COM MATRICULA PASSADA
+//FUNCAO PARA ABRIR E GRAVA REGISTRO BASE DA DADOS DO FUNCIONARIO
 const  gravar = async (infor) =>{
   try{
   let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
@@ -25,8 +25,7 @@ const  gravar = async (infor) =>{
 
 
 
-
-//ADD NOVO FUNCIONARIO
+//ADD UM NOVO FUNCIONARIO AO DADOS
 Router.post("/user", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
@@ -41,7 +40,7 @@ Router.post("/user", async (req,res) =>{
   
   })
 
-  
+//CONSULTA A MATRICULA DO FUNCIONARIO
 Router.get("/user/:matricula", async(req, res) =>{
   let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
@@ -55,7 +54,7 @@ Router.get("/user/:matricula", async(req, res) =>{
 
 
 })
-//ATUALIZAR USUARIO
+//ATUALIZA OS DADOS DO FUNCIONARIO
 Router.put("/user", async(req, res) => {
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
@@ -81,6 +80,7 @@ Router.put("/user", async(req, res) => {
 }
   
 })
+//DELETA FUNCIONARIO
 Router.delete("/user", async(req, res) => {
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{

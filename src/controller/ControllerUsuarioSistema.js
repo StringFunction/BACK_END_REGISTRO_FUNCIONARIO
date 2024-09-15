@@ -21,7 +21,7 @@ const  gravar = async (infor) =>{
 
 
 
-//ADD NOVO FUNCIONARIO
+//ADD NOVO USUARIO PARA USAR SISTEMA
 Router.post("/user", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
@@ -36,7 +36,7 @@ Router.post("/user", async (req,res) =>{
   
   })
 
-  
+//CONSULTA USUARIO 
 Router.get("/user/:matricula", async(req, res) =>{
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
 
@@ -78,6 +78,7 @@ Router.put("/user", async(req, res) => {
 }
   
 })
+//DELETA USUARIO DOS REGISTRO DO BD 
 Router.delete("/user", async(req, res) => {
   if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{

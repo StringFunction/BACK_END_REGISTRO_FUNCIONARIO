@@ -12,6 +12,13 @@
       "senha" : "123",
       "setor" : "teste",
       "nivel" : "1"
+    },
+    {
+      "matricula" :"141277",
+      "nome" : "clecio",
+      "senha" : "123",
+      "setor" : "teste",
+      "nivel" : "3"
     }
   ]
 }
