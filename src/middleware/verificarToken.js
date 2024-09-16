@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const fs = require("fs")
-const caminho = "../src/config/lista_negraToken.json"
+const caminho = "./src/config/lista_negraToken.json"
 
 
 
@@ -9,7 +9,7 @@ async function vericarToken(req, res, next) {
     const registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
     const index =  registro.lista_negra.findIndex(item => item == token)
 
-    if (index !== -1) return res.status(498).send({mensagem : "token na lista negra"})
+    if (index !== -1) return res.status(498).send({mensagem : "token na lista negra verificar"})
     jwt.verify(token, "ClecioBonitao", (erro, decode) =>{
         if (erro) return (res.status(498).send({mensagem : "token invalido"}))
   
