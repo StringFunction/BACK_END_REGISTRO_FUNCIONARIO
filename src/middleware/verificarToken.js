@@ -8,6 +8,7 @@ async function vericarToken(req, res, next) {
     const token = req.headers["x-access-token"]
     const registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
     const index =  registro.lista_negra.findIndex(item => item == token)
+    if(!!!token) return res.status(423).send({mensagem : "NECESSARIO UM TOKEN"})
 
     if (index !== -1) return res.status(498).send({mensagem : "token na lista negra verificar"})
     jwt.verify(token, "ClecioBonitao", (erro, decode) =>{

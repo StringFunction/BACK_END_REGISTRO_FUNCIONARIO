@@ -19,16 +19,17 @@ const  gravaPassagem = async (infor) =>{
 Router.post("/Registro", async(req,res) =>{
   try{
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
-    const index =registro.passagens.findIndex((e) => e.matricula == req.body.matricula)
+    const index = registro.passagens.findIndex((e) => e.matricula == req.body.matricula)
     if(index == -1){
 
         const response = await gravaPassagem(req.body)
-         return res.status(201).send({mensagem : "Passagem Registrada"})
-    }else return res.status(401).send({mensagem : "Funcionario ja Registrado"})
+         return res.status(200).send({mensagem : "Passagem Registrada"})
+
+    } else return res.status(302).send({mensagem : "Funcionario ja Registrado"})
 
 
   }catch(erro){
-    return res.status(401).send({mensagem :  "erro ao tenta registraPassagem"})
+    return res.status(500).send({mensagem :  "erro ao tenta registraPassagem"})
   }
 
 })

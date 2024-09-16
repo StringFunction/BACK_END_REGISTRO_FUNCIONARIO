@@ -4,21 +4,14 @@
       "matricula": "123456",
       "nome": "clecio",
       "senha": "12345",
-      "nivel": "2"
+      "nivel": "78"
     },
     {
-      "matricula" :"147741",
-      "nome" : "maquinadosucesso",
-      "senha" : "123",
-      "setor" : "teste",
-      "nivel" : "1"
-    },
-    {
-      "matricula" :"141277",
-      "nome" : "clecio",
-      "senha" : "123",
-      "setor" : "teste",
-      "nivel" : "3"
+      "matricula": "141277",
+      "nome": "clecio",
+      "senha": "123",
+      "setor": "teste",
+      "nivel": "3"
     }
   ]
 }

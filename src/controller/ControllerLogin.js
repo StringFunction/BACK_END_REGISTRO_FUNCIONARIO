@@ -33,27 +33,27 @@ Router.post("/user", async (req, res) =>{
         const token =  jwt.sign(result,"ClecioBonitao", {expiresIn : "1h"})
         return res.status(200).json({"token" : token})
         } else{
-            return res.status(401).send({mensagem : "usuario nao encontrado"})
+            return res.status(404).send({mensagem : "USUARIO OU SENHA INCORRETA"})
         }
 
     }catch (erro) {
         console.log(erro);
         
-        return res.status(500).send("erro interno")
+        return res.status(500).send({mensagem : "ERRO NO SERVIDOR DE AUTENTICAO "})
     }
 
     
 })
 //DESLOGAR E REGISTRA TOKEN 
 Router.post("/logaut", vericarToken, async (req, res) =>{
+    const token = req.headers["x-access-token"] 
     const registro = await JSON.parse(fs.readFileSync(caminha_lista_negra, 'utf-8'));
     const index =  registro.lista_negra.findIndex(item => item == token)
     if (index !== -1) return res.status(498).send({mensagem : "token na lista negra"})
     
-    const token = req.headers["x-access-token"]
     const response = await grava_token_na_lista_negra(token)
     if (!!response) return res.status(200).send(response)
-    res.status(500).send({mensagem : "erro ao tenta grava token"})
+    res.status(500).send({mensagem : "ERRO NO SERVIDOR DE LISTA NEGRA TOKEN"})
     
 
 })

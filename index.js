@@ -3,7 +3,7 @@ require("./src/routes/RotaFuncinario")
 require("./src/routes/RotaLogin")
 require("./src/routes/RotaUsuario")
 require("./src/routes/RotaPassagem")
-require("./src/config/dabase")
+// require("./src/config/dabase")
 const app = require("./src/app")
 const http = require("http")
 const port = process.env.PORT || 3000

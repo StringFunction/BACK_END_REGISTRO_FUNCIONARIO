@@ -3,7 +3,7 @@ const Router = express.Router()
 const fs = require('fs')
 // const registro = require("../dados.json")
 const modelFunc = require("../models/ModelFuncionario")
-const caminho = "./src/config/funcionario.json"
+const caminho = "./src/config/funcionarios.json"
 
 
 //FUNCAO PARA ABRIR E GRAVA REGISTRO BASE DA DADOS DO FUNCIONARIO
@@ -22,87 +22,130 @@ const  gravar = async (infor) =>{
 
 }
 
+//CONSULTA A MATRICULA DO FUNCIONARIO
+Router.get("/user/:matricula", async(req, res) =>{
+  try {
+
+    let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+    console.log("teste");
+    
+    const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
+    if (!!resultado) {
+      res.status(200).send(resultado)
+      
+    } else{
+      return res.status(404).send("usuario n encontrado")
+      
+    }
+    
+  }catch(erro){
+    console.log(erro);
+    
+    return res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTAR LOCALIZAR MATRICULA"})
+  }
+
+})
+//RETORNA TODOS OS FUNCIONARIOS
+Router.get("/user", async(req, res) =>{
+  try {
+
+    let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+    console.log("teste");
+    
+    const resultado = registro.dados
+    if (!!resultado) {
+      res.status(200).send(resultado)
+      
+    } else{
+      return res.status(404).send("usuario n encontrado")
+      
+    }
+    
+  }catch(erro){
+    console.log(erro);
+    
+    return res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTAR LOCALIZAR MATRICULA"})
+  }
+
+})
+
 
 
 
 //ADD UM NOVO FUNCIONARIO AO DADOS
 Router.post("/user", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
 
     resposta = await gravar(req.body)
 
     if(!!resposta){
       res.status(200).send(resposta)
     }else{
-      res.status(401).send("erro")
+      res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTA CRIAR NOVO FUNCIONARIO"})
     }
   
   })
 
-//CONSULTA A MATRICULA DO FUNCIONARIO
-Router.get("/user/:matricula", async(req, res) =>{
-  let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
-  const resultado = registro.dados.find((e) => e.matricula == req.params.matricula)
-  if (!!resultado) {
-    res.status(200).send(resultado)
-    
-  } else{
-    res.status(401).send("usuario n encontrado")
-
-  }
-
-
-})
 //ATUALIZA OS DADOS DO FUNCIONARIO
 Router.put("/user", async(req, res) => {
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const index = openFuncioario.dados.findIndex((e) => e.matricula == req.body.matricula)
  
-
+  
   if(index >= 0){
-    res.status(200).send(openFuncioario.dados[index])
+    
     openFuncioario.dados[index] = { ...openFuncioario.dados[index], ...req.body };
-      
+    
     fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', (erro) => {
-      if (erro) throw erro;
-      console.log('Arquivo atualizado com sucesso!');
-    });
+      if(erro) return   res.status(500).send({mesagem : "ERRO AO TENTA ATUALIZAR DADOS DE FUNCIONARIO"})
+      return res.status(200).send({mensagem : 'Arquivo atualizado com sucesso!'})
+    })
+
+
+    
+    
   }else {
-    res.status(400).send({mensaga : "usuario n encontrdao"})
+    return res.status(404).send({mensaga : "usuario n encontrdao"})
   }
 
 
 }catch (erro){
-  res.send({erro})
+  console.log(erro);
+  
+  return res.status(500).send({mesagem : "ERRO AO TENTA ATUALIZAR DADOS DE FUNCIONARIO"})
 }
   
 })
+
+
+
 //DELETA FUNCIONARIO
 Router.delete("/user", async(req, res) => {
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const index = openFuncioario.dados.findIndex((e) => e.matricula == req.body.matricula)
  
 
   if(index >= 0){
-    res.status(200).send(openFuncioario.dados[index])
+  
     openFuncioario.dados.splice(index, 1)
       
-    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', (erro) => {
-      if (erro) throw erro;
-      console.log('Arquivo atualizado com sucesso!');
-    });
+    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', () => {
+      return res.status(200).send({mensagem : "Funcionario deletado"})
+
+    })
+    
   }else {
-    res.status(400).send({mensaga : "usuario n encontrdao"})
+    return res.status(404).send({mensaga : "funcionario n encontrdao"})
   }
 
 
 }catch (erro){
-  res.send({erro})
+  res.status(500).send({mesagem : "ERRO AO TENTA DELETA DADOS DE FUNCIONARIO"})
 }
   
 })

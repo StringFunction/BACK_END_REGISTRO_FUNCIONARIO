@@ -8,7 +8,9 @@ const  gravar = async (infor) =>{
   try{
   let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   registro.usuarios.push(infor)
-  fs.writeFileSync(caminho, JSON.stringify(registro, null, 2), 'utf-8');
+  fs.writeFileSync(caminho, JSON.stringify(registro, null, 2), 'utf-8', () =>{
+    return res.status(200).send({mensagem : "USUARIO DELETADO"})
+  });
   return (registro.usuarios)
 
 } catch (erro) {
@@ -24,83 +26,91 @@ const  gravar = async (infor) =>{
 //ADD NOVO USUARIO PARA USAR SISTEMA
 Router.post("/user", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
 
     resposta = await gravar(req.body)
 
     if(!!resposta){
       res.status(200).send(resposta)
     }else{
-      res.status(401).send("erro")
+      res.status(500).send({mensagem : "ERRO NO SERVIDOR DE CRIA NOVO USUARIO"})
     }
   
   })
 
 //CONSULTA USUARIO 
 Router.get("/user/:matricula", async(req, res) =>{
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
+  try{
 
-  let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
-  const resultado = registro.usuarios.find((e) => e.matricula == req.params.matricula)
-  if (!!resultado) {
-    res.status(200).send(resultado)
-    
-  } else{
-    res.status(401).send("usuario n encontrado")
-
-  }
+      let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+      const resultado = registro.usuarios.find((e) => e.matricula == req.params.matricula)
+      if (!!resultado) {
+        res.status(200).send(resultado)
+        
+      } else{
+        return res.status(404).send("usuario n encontrado")
+        
+      }
+}catch(erro){
+  return res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTA LOCALIZAR USUARIO "})
+}
 
 
 })
 //ATUALIZAR USUARIO
 Router.put("/user", async(req, res) => {
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const index = openFuncioario.usuarios.findIndex((e) => e.matricula == req.body.matricula)
  
 
   if(index >= 0){
-    res.status(200).send(openFuncioario.usuarios[index])
+
     openFuncioario.usuarios[index] = { ...openFuncioario.usuarios[index], ...req.body };
       
-    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', (erro) => {
-      if (erro) throw erro;
-      console.log('Arquivo atualizado com sucesso!');
-    });
+    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', () =>{
+        return res.status(200).send({mensagem : "DADOS USUARIO ATUALIZADO"})
+     
+    }) 
+    
   }else {
-    res.status(400).send({mensaga : "usuario n encontrdao"})
+    return res.status(404).send({mensaga : "usuario n encontrdao"})
   }
 
 
 }catch (erro){
-  res.send({erro})
+  return res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTA ATUALIZA USUARIO "})
 }
   
 })
+
 //DELETA USUARIO DOS REGISTRO DO BD 
 Router.delete("/user", async(req, res) => {
-  if(req.nivel in ["2","3"]) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+  if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
   const index = openFuncioario.usuarios.findIndex((e) => e.matricula == req.body.matricula)
  
 
   if(index >= 0){
-    res.status(200).send(openFuncioario.usuarios[index])
     openFuncioario.usuarios.splice(index, 1)
       
-    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', (erro) => {
-      if (erro) throw erro;
-      console.log('Arquivo atualizado com sucesso!');
-    });
+    fs.writeFile(caminho, JSON.stringify(openFuncioario, null, 2), 'utf-8', () =>{
+      return res.status(200).send({mensagem : "USUARIO DELETADO"})
+    }) 
+    
+    
+
   }else {
-    res.status(400).send({mensaga : "usuario n encontrdao"})
+    return res.status(404).send({mensaga : "usuario n encontrdao"})
   }
 
 
 }catch (erro){
-  res.send({erro})
+  return res.status(500).send({mensagem : "ERRO NO SERVIDOR AO TENTA DELETADO USUARIO "})
+
 }
   
 })
