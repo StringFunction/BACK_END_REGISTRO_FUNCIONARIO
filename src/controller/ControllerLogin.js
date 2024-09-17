@@ -22,7 +22,7 @@ const  grava_token_na_lista_negra = async (infor) =>{
   
   }
 //AUTENTICACAO 
-Router.post("/user", async (req, res) =>{
+Router.post("", async (req, res) =>{
     try{
         const response = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
         const result = response.usuarios.find((e) => e.matricula == req.body.matricula &&  req.body.senha == e.senha )

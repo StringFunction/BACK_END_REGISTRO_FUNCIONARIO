@@ -23,8 +23,13 @@ const  gravar = async (infor) =>{
 }
 
 //CONSULTA A MATRICULA DO FUNCIONARIO
-Router.get("/user/:matricula", async(req, res) =>{
+Router.get("/:matricula", async(req, res) =>{
   try {
+    const matricula = req.params.matricula;
+    if (!/^\d+$/.test(matricula)) { // Aqui, estou assumindo que a matrícula deve ser numérica e ter 6 dígitos
+        return res.status(400).send({ mensagem: "Matrícula inválida. Verifique o formato." });
+    }
+
 
     let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
     console.log("teste");
@@ -46,7 +51,7 @@ Router.get("/user/:matricula", async(req, res) =>{
 
 })
 //RETORNA TODOS OS FUNCIONARIOS
-Router.get("/user", async(req, res) =>{
+Router.get("/", async(req, res) =>{
   try {
 
     let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
@@ -73,9 +78,15 @@ Router.get("/user", async(req, res) =>{
 
 
 //ADD UM NOVO FUNCIONARIO AO DADOS
-Router.post("/user", async (req,res) =>{  
+Router.post("/", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
+  const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+
+  const index = openFuncioario.dados.findIndex((e) => e.matricula == req.body.matricula)
+
+  
   if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
+    if (index >= 0) return res.status(404).send({mesagem : "MATRICULA JA CADASTRADA "})
 
     resposta = await gravar(req.body)
 
@@ -88,7 +99,7 @@ Router.post("/user", async (req,res) =>{
   })
 
 //ATUALIZA OS DADOS DO FUNCIONARIO
-Router.put("/user", async(req, res) => {
+Router.put("/", async(req, res) => {
   if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
@@ -123,7 +134,7 @@ Router.put("/user", async(req, res) => {
 
 
 //DELETA FUNCIONARIO
-Router.delete("/user", async(req, res) => {
+Router.delete("/", async(req, res) => {
   if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));

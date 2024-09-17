@@ -24,9 +24,13 @@ const  gravar = async (infor) =>{
 
 
 //ADD NOVO USUARIO PARA USAR SISTEMA
-Router.post("/user", async (req,res) =>{  
+Router.post("", async (req,res) =>{  
   console.log(req.nivel + "  nivel do usuario");
   if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
+    let registro = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+    const resultado = registro.usuarios.find((e) => e.matricula == req.body.matricula)
+
+    if(!!resultado) return res.status(302).send({mensagem : "Usuario ja Cadastrado "})
 
     resposta = await gravar(req.body)
 
@@ -39,7 +43,7 @@ Router.post("/user", async (req,res) =>{
   })
 
 //CONSULTA USUARIO 
-Router.get("/user/:matricula", async(req, res) =>{
+Router.get("/:matricula", async(req, res) =>{
   if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
   try{
 
@@ -59,7 +63,7 @@ Router.get("/user/:matricula", async(req, res) =>{
 
 })
 //ATUALIZAR USUARIO
-Router.put("/user", async(req, res) => {
+Router.put("/", async(req, res) => {
   if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
@@ -87,11 +91,11 @@ Router.put("/user", async(req, res) => {
 })
 
 //DELETA USUARIO DOS REGISTRO DO BD 
-Router.delete("/user", async(req, res) => {
+Router.delete("/:matricula", async(req, res) => {
   if(!["3"].includes(req.nivel)) return res.status(423).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
-  const index = openFuncioario.usuarios.findIndex((e) => e.matricula == req.body.matricula)
+  const index = openFuncioario.usuarios.findIndex((e) => e.matricula == req.params.matricula)
  
 
   if(index >= 0){
