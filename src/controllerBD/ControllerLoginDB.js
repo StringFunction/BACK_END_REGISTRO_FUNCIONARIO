@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken")
 
 
 
-Router.post("", async(req,res) =>{
+Router.post("/", async(req,res) =>{
     try{
         const resposta = await usuario.findAll()
         console.log(resposta);
