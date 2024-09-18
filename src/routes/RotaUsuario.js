@@ -1,6 +1,6 @@
 const app = require("../app")
 const Consulta = require("../controller/ControllerUsuarioSistema")
-// const usuario = require("../controllerBD/controlleBDusuario")
+const usuario = require("../controllerBD/controlleBDusuario")
 const fs = require("fs")
 const jwt = require("jsonwebtoken")
 const caminho = "./src/config/lista_negraToken.json"
@@ -11,4 +11,4 @@ function nivelAcesso(req, res,next){
 }
 
 app.use("/v1/usuario", vericarToken, Consulta)
-// app.use("/v1/usuariodb", vericarToken, nivelAcesso, usuario)
+app.use("/v1/usuariodb", vericarToken, nivelAcesso, usuario)

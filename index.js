@@ -6,7 +6,7 @@ require("./src/routes/RotaPassagem")
 // require("./src/config/dabase")
 const app = require("./src/app")
 const http = require("http")
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 10000
 
 
 

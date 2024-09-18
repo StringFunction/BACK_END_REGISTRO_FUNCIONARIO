@@ -31,7 +31,7 @@ Router.post("", async (req, res) =>{
 
         if (!!result){
         const token =  jwt.sign(result,"ClecioBonitao", {expiresIn : "1h"})
-        return res.status(200).json({"token" : token})
+        return res.status(200).send({"token" : token})
         } else{
             return res.status(404).send({mensagem : "USUARIO OU SENHA INCORRETA"})
         }
