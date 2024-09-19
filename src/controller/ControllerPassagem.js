@@ -33,6 +33,17 @@ Router.post("/Registro", async(req,res) =>{
   }
 
 })
+Router.get("/Registro", async(req, res) =>{
+  try{
+    const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
+    return res.status(200).send(registro.passagens)
+
+
+  }catch(erro){
+    return res.status(500).send({mensagem : "ERRO NO SERVIDOR"})
+  }
+
+})
 
 
 module.exports = Router

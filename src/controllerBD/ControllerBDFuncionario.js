@@ -9,6 +9,8 @@ const gravar = async (infor) => {
     const novoFuncionario = await modelFunc.create(infor); // Insere novo registro
     return novoFuncionario;
   } catch (erro) {
+    console.log(erro);
+    
     return false;
   }
 };
@@ -16,7 +18,7 @@ const gravar = async (infor) => {
 // ADD UM NOVO FUNCIONÁRIO AO BANCO DE DADOS
 Router.post("/user", async (req, res) => {
   console.log(req.nivel + "  nivel do usuario db");
-  if (["2", "3"].includes(req.nivel)) {
+  if ([2, 3].includes(req.nivel)) {
 
   
   const resposta = await gravar(req.body);
