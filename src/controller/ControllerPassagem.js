@@ -44,6 +44,19 @@ Router.get("/Registro", async(req, res) =>{
   }
 
 })
+Router.delete("/Registro", async (req,res) =>{
+  try{
+    const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
+    registro.passagens = []
+    fs.writeFileSync(caminhoPassagem, JSON.stringify(registro, null, 2), 'utf-8');
+    res.status(200).send({mensagem : "FINALIZADO"})
+
+  }catch(erro){
+    return res.status(500).send({mensagem : "ERRO NO SERVIDOR"})
+  }
+
+
+})
 
 
 module.exports = Router
