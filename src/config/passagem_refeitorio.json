@@ -1,3 +1,20 @@
 {
-  "passagens": []
+  "passagens": [
+    {
+      "id": "02",
+      "matricula": "123",
+      "nome": "manga",
+      "setor": "manga",
+      "cargo": "escravo",
+      "status": "ativo"
+    },
+    {
+      "id": "01",
+      "matricula": "12345",
+      "nome": "marianna",
+      "setor": "teste",
+      "cargo": "escravo",
+      "status": "nao"
+    }
+  ]
 }
