@@ -26,6 +26,11 @@
       "setor": "Ass",
       "cargo": "ass",
       "status": "ativo"
+    },
+    {
+      "nome": "marianna",
+      "matricula": "456789",
+      "setor": "teste"
     }
   ]
 }

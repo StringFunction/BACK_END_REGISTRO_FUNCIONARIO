@@ -18,28 +18,41 @@ const  gravaPassagem = async (infor) =>{
 
 Router.post("/Registro", async(req,res) =>{
   try{
+    console.log("Registrando passagem");
+    
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
     const index = registro.passagens.findIndex((e) => e.matricula == req.body.matricula)
     if(index == -1){
 
         const response = await gravaPassagem(req.body)
+        console.log("Passagem registrada com sucesso");
+        
          return res.status(200).send({mensagem : "Passagem Registrada"})
 
-    } else return res.status(302).send({mensagem : "Funcionario ja Registrado"})
+    } else {
+
+    console.log("Funcionario ja comeu");
+      return res.status(302).send({mensagem : "Funcionario ja Registrado"})
+    }
 
 
   }catch(erro){
+    console.log(erro);
+    
     return res.status(500).send({mensagem :  "erro ao tenta registraPassagem"})
   }
 
 })
-Router.get("/Registro", async(req, res) =>{
+Router.get("/", async(req, res) =>{
   try{
+    console.log('Consultando funcionario ja registrado');
+    
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
     return res.status(200).send(registro.passagens)
 
 
   }catch(erro){
+    console.log(erro);
     return res.status(500).send({mensagem : "ERRO NO SERVIDOR"})
   }
 
