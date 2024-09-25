@@ -46,7 +46,6 @@ Router.post("/Registro", async(req,res) =>{
 Router.get("/", async(req, res) =>{
   try{
     console.log('Consultando funcionario ja registrado');
-    
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
     return res.status(200).send(registro.passagens)
 
