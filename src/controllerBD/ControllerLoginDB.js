@@ -6,19 +6,15 @@ const jwt = require("jsonwebtoken")
 
 
 
-
 Router.post("/", async(req,res) =>{
     try{
+        const ip = req.ip || req.connection.remoteAddress;
+        console.log("IP DO SOLICITANTE " + ip);
         const resposta = await usuario.findAll()
-        console.log(resposta);
-        
         const usuarioEncontra =   resposta.find((e) => e.matricula == req.body.matricula && e.senha == req.body.senha)
-        console.log("8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
-        
-        console.log(usuarioEncontra);
-        
-
         if(!!usuarioEncontra){
+            console.log("Usuario autenticado ");
+            
             const pegar = {
                 matricula : usuarioEncontra.matricula,
                 nome : usuarioEncontra.nome,

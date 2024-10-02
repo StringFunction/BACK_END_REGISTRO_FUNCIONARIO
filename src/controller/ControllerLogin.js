@@ -15,6 +15,8 @@ const  grava_token_na_lista_negra = async (infor) =>{
     return (registro.lista_negra)
   
   } catch (erro) {
+    console.log(erro);
+    
     return (false)
   }
    
@@ -24,21 +26,22 @@ const  grava_token_na_lista_negra = async (infor) =>{
 //AUTENTICACAO 
 Router.post("", async (req, res) =>{
     try{
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        console.log("IP DO SOLICITANTE " + ip);
         const response = await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
         const result = response.usuarios.find((e) => e.matricula == req.body.matricula &&  req.body.senha == e.senha )
-        console.log(result);
-        
-
         if (!!result){
+        console.log("Usuario autenticado " + result.nome + "\n" + "Matricula " + result.matricula);
+        
         const token =  jwt.sign(result,"ClecioBonitao", {expiresIn : "1h"})
         return res.status(200).send({"token" : token})
         } else{
+            console.log("Usuario nao encontrado");
             return res.status(404).send({mensagem : "USUARIO OU SENHA INCORRETA"})
         }
 
     }catch (erro) {
         console.log(erro);
-        
         return res.status(500).send({mensagem : "ERRO NO SERVIDOR DE AUTENTICAO "})
     }
 
@@ -46,6 +49,9 @@ Router.post("", async (req, res) =>{
 })
 //DESLOGAR E REGISTRA TOKEN 
 Router.post("/logaut", vericarToken, async (req, res) =>{
+    const ip = req.ip || req.connection.remoteAddress;
+    console.log("IP DO SOLICITANTE " + ip);
+    console.log("Solicatacao deslogar");
     const token = req.headers["x-access-token"] 
     const registro = await JSON.parse(fs.readFileSync(caminha_lista_negra, 'utf-8'));
     const index =  registro.lista_negra.findIndex(item => item == token)

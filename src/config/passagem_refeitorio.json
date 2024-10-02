@@ -1,20 +1,25 @@
 {
   "passagens": [
     {
-      "id": "02",
       "matricula": "123",
-      "nome": "manga",
-      "setor": "manga",
-      "cargo": "escravo",
+      "nome": "Clecio",
+      "setor": "Ass",
+      "cargo": "ass",
       "status": "ativo"
     },
     {
-      "id": "01",
-      "matricula": "12345",
-      "nome": "marianna",
-      "setor": "teste",
-      "cargo": "escravo",
-      "status": "nao"
+      "matricula": "789",
+      "nome": "Clecio",
+      "setor": "Ass",
+      "cargo": "ass",
+      "status": "ativo"
+    },
+    {
+      "matricula": "456",
+      "nome": "Clecio",
+      "setor": "Ass",
+      "cargo": "ass",
+      "status": "ativo"
     }
   ]
 }
