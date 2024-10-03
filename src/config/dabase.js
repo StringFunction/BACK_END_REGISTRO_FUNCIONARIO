@@ -11,4 +11,4 @@ conn.authenticate().then(()=>{
 
 
 
-// module.exports = conn
+module.exports = conn

@@ -120,7 +120,7 @@ Router.delete("/", async(req, res) => {
   if(!["2","3"].includes(req.nivel)) return res.status(401).send({mensagem : "vc n tem permissao"}) 
   try{
   const openFuncioario =  await JSON.parse(fs.readFileSync(caminho, 'utf-8'));
-  const index = openFuncioario.dados.findIndex((e) => e.matricula == req.body.matricula)
+  const index = openFuncioario.dados.findIndex((e) => e.matricula == req.body.quand)
  
 
   if(index >= 0){
