@@ -1,3 +1,4 @@
+const { log } = require("console")
 const express = require("express")
 const Router = express.Router()
 const fs = require("fs")
@@ -19,6 +20,7 @@ const  gravaPassagem = async (infor) =>{
 Router.post("/Registro", async(req,res) =>{
   try{
     console.log("Registrando passagem");
+    console.log("Usuario " + req.matricula + " registrando passagem");
     
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
     const index = registro.passagens.findIndex((e) => e.matricula == req.body.matricula)
@@ -57,11 +59,14 @@ Router.get("/", async(req, res) =>{
 
 })
 Router.delete("/Registro", async (req,res) =>{
+  console.log("Usuario " + req.matricula + " Finalizando consulta");
   try{
     const registro = await JSON.parse(fs.readFileSync(caminhoPassagem, 'utf-8'));
     registro.passagens = []
     fs.writeFileSync(caminhoPassagem, JSON.stringify(registro, null, 2), 'utf-8');
     res.status(200).send({mensagem : "FINALIZADO"})
+    console.log("Registro finalizado com sucesso");
+    
 
   }catch(erro){
     return res.status(500).send({mensagem : "ERRO NO SERVIDOR"})

@@ -6,20 +6,6 @@
       "setor": "Ass",
       "cargo": "ass",
       "status": "ativo"
-    },
-    {
-      "matricula": "789",
-      "nome": "Clecio",
-      "setor": "Ass",
-      "cargo": "ass",
-      "status": "ativo"
-    },
-    {
-      "matricula": "456",
-      "nome": "Clecio",
-      "setor": "Ass",
-      "cargo": "ass",
-      "status": "ativo"
     }
   ]
 }
