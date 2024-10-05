@@ -4,21 +4,25 @@
       "id": "01",
       "matricula": "12345",
       "nome": "marianna",
-      "setor": "teste"
+      "setor": "teste",
+      "cargo" : "escravo",
+      "status" : "nao"
     },
     {
+      "id": "02",
       "matricula": "123",
-      "nome": "Clecio",
-      "setor": "Ass",
-      "cargo": "ass",
-      "status": "ativo"
+      "nome": "manga",
+      "setor": "manga",
+      "cargo" : "escravo",
+      "status" : "ativo"
     },
     {
-      "matricula": "456",
-      "nome": "Clecio",
-      "setor": "Ass",
-      "cargo": "ass",
-      "status": "ativo"
+      "id": "03",
+      "matricula": "1234",
+      "nome": "caju com mel",
+      "setor": "sem eida",
+      "cargo" : "teste",
+      "status" : "ativo"
     },
     {
       "matricula": "789",
@@ -34,3 +38,4 @@
     }
   ]
 }
+
