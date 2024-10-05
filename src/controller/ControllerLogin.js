@@ -33,7 +33,7 @@ Router.post("", async (req, res) =>{
         if (!!result){
         console.log("Usuario autenticado " + result.nome + "\n" + "Matricula " + result.matricula);
         
-        const token =  jwt.sign(result,"ClecioBonitao", {expiresIn : "1h"})
+        const token =  jwt.sign(result,"ClecioBonitao", {expiresIn : "5m"})
         return res.status(200).send({"token" : token})
         } else{
             console.log("Usuario nao encontrado");
