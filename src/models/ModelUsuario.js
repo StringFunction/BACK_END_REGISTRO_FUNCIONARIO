@@ -11,14 +11,29 @@ const Usuarios = conn.define("Usuarios", {
         type : DataTypes.STRING,
         allowNull : false
     },
+    empresa : {
+        type : DataTypes.STRING,
+        allowNull : false
+    },
+    setor : {
+        type : DataTypes.STRING,
+        allowNull : false
+    },
+    cargo : {
+        type : DataTypes.STRING,
+        allowNull : false
+    },
     senha : {
         type : DataTypes.STRING,
         allowNull : false
     },
+
     nivel : {
         type : DataTypes.INTEGER,
         allowNull : false
     }
+}, {
+    timestamps : false
 })
 
 conn.sync().then(() => {

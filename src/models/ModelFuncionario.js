@@ -1,12 +1,13 @@
 const conn =  require("../config/dabase")
 const {DataTypes} = require("sequelize")
 
-
+	
 
 const FUNCIONARIO = conn.define("Funcionarios", {
     matricula : {
         type: DataTypes.INTEGER,
-        allowNull : false
+        allowNull : false,
+        primaryKey : true
     },
     nome : {
         type : DataTypes.STRING,
@@ -25,7 +26,7 @@ const FUNCIONARIO = conn.define("Funcionarios", {
         type : DataTypes.STRING,
         allowNull : false
     },
-    refeitorio : {
+    Optante : {
         type : DataTypes.BOOLEAN,
         defaultValue : true
     }

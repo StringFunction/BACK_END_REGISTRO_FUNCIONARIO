@@ -16,6 +16,7 @@ async function vericarToken(req, res, next) {
   
             req.matricula = decode.matricula
             req.nivel = decode.nivel
+
             next()
     })
   
