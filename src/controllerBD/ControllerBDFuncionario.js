@@ -105,6 +105,8 @@ Router.delete("/", async (req, res) => {
       res.status(404).send({ mensagem: "Usuário não encontrado" });
     }
   } catch (erro) {
+    console.log(erro);
+    
     res.status(500).send({mensagem : "erro aqui "});
   }
 });

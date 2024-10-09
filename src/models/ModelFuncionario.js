@@ -34,6 +34,7 @@ const FUNCIONARIO = conn.define("Funcionarios", {
 {
     timestamps : false
 })
+
 FUNCIONARIO.sync().then(() =>{
     console.log("tabela funcionario sincronizada");
     

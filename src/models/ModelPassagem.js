@@ -10,6 +10,8 @@ const PASSAGEM = conn.define("Passagens" , {
             model : FUNCIONARIO,
             key : "matricula"
         },
+        onDelete: 'CASCADE', // Exclui passagens ao deletar um funcionário
+        onUpdate: 'CASCADE'  // Atualiza passagens ao alterar a matrícula do funcionário
 
     },
     data_registro: {
@@ -28,9 +30,9 @@ const PASSAGEM = conn.define("Passagens" , {
         ]
 })
 // Definindo o relacionamento (uma passagem pertence a um funcionário)
-PASSAGEM.belongsTo(FUNCIONARIO, { foreignKey: 'funcionario_id' });
+PASSAGEM.belongsTo(FUNCIONARIO, { foreignKey: 'funcionario_id', onDelete: 'CASCADE', });
 // Um funcionário pode ter várias PASSAGEM
-FUNCIONARIO.hasMany(PASSAGEM, { foreignKey: 'funcionario_id' });
+FUNCIONARIO.hasMany(PASSAGEM, { foreignKey: 'funcionario_id', onDelete : "CASCADE", onUpdate : "CASCADE"});
 
 
 PASSAGEM.sync().then(() => console.log("TABELA PASSAGEM SINCRONIZADA")).catch((erro) => console.log(erro)

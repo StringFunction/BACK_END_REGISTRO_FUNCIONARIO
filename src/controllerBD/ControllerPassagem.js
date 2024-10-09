@@ -23,9 +23,10 @@ rota.get("/", async (req,res) => {
 rota.post("/", async (req,res) => {
 
     try{
-        const consultandoFuncionario = await FUNCIONARIO.findOne({where : {
-            matricula : req.body.matricula
-        }})
+        const consultandoFuncionario = await FUNCIONARIO.findOne({where : {matricula : req.body.matricula}})
+       console.log(consultandoFuncionario);
+       
+        
 
         if (!!consultandoFuncionario) {
             const registrar = await PASSAGEM.create({funcionario_id : req.body.matricula})
