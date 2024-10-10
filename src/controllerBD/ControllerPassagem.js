@@ -1,19 +1,59 @@
 const PASSAGEM = require("../models/ModelPassagem")
 const FUNCIONARIO = require("../models/ModelFuncionario")
 const express = require("express")
+const ExcelJS = require('exceljs');
+const { continueSession } = require("pg/lib/crypto/sasl")
 const rota = express.Router()
+const email =  require("nodemailer")
+
+const RESPOSTA = ''
+async function consultando() {
+    const RESPOSTA = await PASSAGEM.findAll({ include : {
+        model : FUNCIONARIO,
+        attributes: ["matricula","nome","setor","cargo","empresa","Optante"]
+    },
+    where : {
+        finalizado : null
+    }
+    })
+    return RESPOSTA
+}
+async function CreatePlanilha(){
+    const workbook = new ExcelJS.Workbook()
+    const sheet = workbook.addWorksheet("Registro_funcionario")
+    const RESPOSTA = await consultando()
+
+    sheet.columns = [
+        { header: 'MATRICULA', key: 'matricula', width: 10 },
+        { header: 'NOME', key: 'nome', width: 30 },
+        { header: 'EMPRESA', key: 'empresa', width: 30 },
+        { header: 'Optante', key: 'op', width: 30 },
+       
+      ];
+      RESPOSTA.forEach((e) => {
+        sheet.addRow({
+            "matricula" : e.Funcionario.matricula,
+            "nome" : e.Funcionario.nome,
+            "empresa" : e.Funcionario.empresa,
+            "op" : e.Funcionario.Optante ? "Sim" : "Nao"
+        })
+  
+      });
+      const filePath = 'dados.xlsx';
+      const buffer = await workbook.xlsx.writeBuffer();
+      return buffer
 
 
+}
 rota.get("/", async (req,res) => {
     console.log("Usuario " + req.matricula + "Consultado Passagem" );
     try {
         console.log("CONSULTANDO REGISTRO PASSAGEM " + req.matricula);
+        const RESPOSTA = await consultando()
         
-        const resposta = await PASSAGEM.findAll({ include : {
-            model : FUNCIONARIO,
-            attributes: ["matricula","nome","setor","cargo","empresa","Optante"]
-        }})
-        return res.status(200).send(resposta)  
+     
+ 
+    return res.status(200).send(RESPOSTA)  
     }catch (erro) {
         res.status(505).send({mensagem : "ERRO NO SERVIDOR"})
     }
@@ -46,6 +86,51 @@ rota.post("/", async (req,res) => {
         
     }
 
+})
+rota.post("/finalizar", async(req,res) =>{
+    if(![2,3].includes(req.nivel)) return res.status(501).send({mensagem : "Permissao Negada"})
+        try{
+            const buffer = await CreatePlanilha()
+            let transporter = email.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'cleciolimalive@gmail.com', // Seu email
+                  pass: 'jmqw egwg jafn chbp',           // Sua senha
+                },
+              });
+            
+              let mailOptions = {
+                from: 'cleciolimalive@gmail.com',
+                to: 'franciscoclecioti@gmail.com',
+                subject: 'Dados em Planilha',
+                text: 'Segue em anexo a planilha com os dados solicitados.',
+                attachments: [
+                  {
+                    filename: 'dados.xlsx',
+                    content: buffer, // Enviar o buffer como conteúdo
+                    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                  },
+                ],
+              };
+            
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                  console.log('Erro ao enviar e-mail:', error);
+                } else {
+                  console.log('Email enviado: ' + info.response);
+                }
+              });
+            const atualizar = await PASSAGEM.update({finalizado : "Sim"}, {where : {finalizado : null}})
+            return res.status(200).send({messaagem : "Acho que deu bom"})
+    
+        }catch(erro){
+            console.log(erro);
+            res.status(500).send({messaagem : "Deu ruim"})
+
+            
+        }
+
+    
 })
 
 
