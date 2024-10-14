@@ -1,7 +1,11 @@
 const conn =  require("../config/dabase")
 const {DataTypes} = require("sequelize")
+const {format} = require("date-fns")
+const data_atual = new Date();
+const dataFormatada = format(data_atual, 'yyyy-MM-dd'); 
 const FUNCIONARIO = require("./ModelFuncionario")
-const { format } = require('date-fns');
+
+
 
 const PASSAGEM = conn.define("Passagens" , {
     funcionario_id : {
@@ -18,12 +22,16 @@ const PASSAGEM = conn.define("Passagens" , {
     data_registro: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: () => new Date().toISOString().split('T')[0] // Define apenas a data (YYYY-MM-DD)
+        defaultValue: dataFormatada // Define apenas a data (YYYY-MM-DD)
     },
     finalizado : {
         type: DataTypes.STRING,
         allowNull: true
-    }
+    },
+    // Process : {
+    //     type : DataTypes.STRING,
+    //     allowNull : true
+    // }
 }, 
 
     {

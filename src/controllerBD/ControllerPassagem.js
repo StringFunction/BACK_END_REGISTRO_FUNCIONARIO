@@ -1,33 +1,67 @@
 const PASSAGEM = require("../models/ModelPassagem")
 const FUNCIONARIO = require("../models/ModelFuncionario")
+const { format } = require('date-fns');
+const { Op, json, or } = require('sequelize')
+
 const express = require("express")
 const ExcelJS = require('exceljs');
-const { continueSession } = require("pg/lib/crypto/sasl")
+const data_atual = new Date();
+const dataFormatada = format(data_atual, 'yyyy-MM-dd'); //
 const rota = express.Router()
 const email =  require("nodemailer")
 
-const RESPOSTA = ''
+
 async function consultando() {
     const RESPOSTA = await PASSAGEM.findAll({ include : {
         model : FUNCIONARIO,
         attributes: ["matricula","nome","setor","cargo","empresa","Optante"]
     },
-    where : {
-        finalizado : null
+    where: {
+      [Op.and]: [
+        {
+          finalizado: {
+            [Op.or]: ["PRESENTE", "AUSENTE"]
+          }
+        },
+        {
+          data_registro: dataFormatada 
+        }
+      ]
     }
     })
     return RESPOSTA
 }
+async function PesquisandFuncinario(){
+  const func = await FUNCIONARIO.findAll()
+  const passagens = await PASSAGEM.findAll()
+
+  func.forEach(async (e) => {
+    if (e.Optante){
+        const r = passagens.findIndex((f) => f.funcionario_id == e.matricula && f.data_registro == dataFormatada)
+
+        if (r < 0){
+          const registrar = await PASSAGEM.create({funcionario_id : e.matricula, finalizado : "AUSENTE"})
+
+        }
+      }
+  })
+}
 async function CreatePlanilha(){
     const workbook = new ExcelJS.Workbook()
     const sheet = workbook.addWorksheet("Registro_funcionario")
-    const RESPOSTA = await consultando()
+    const j = await PesquisandFuncinario() 
+
+    const atualizar = await PASSAGEM.update({finalizado : "PRESENTE"}, {where : {finalizado : null}})
+    const RESPOSTA = await consultando() 
+  
 
     sheet.columns = [
         { header: 'MATRICULA', key: 'matricula', width: 10 },
         { header: 'NOME', key: 'nome', width: 30 },
         { header: 'EMPRESA', key: 'empresa', width: 30 },
-        { header: 'Optante', key: 'op', width: 30 },
+        { header: 'OPTANTE', key: 'op', width: 30 },
+        { header: 'STATUS', key: 'status', width: 30 },
+        { header: 'DATA_ENTRADA', key: 'dt_entrada', width: 30 },
        
       ];
       RESPOSTA.forEach((e) => {
@@ -35,11 +69,15 @@ async function CreatePlanilha(){
             "matricula" : e.Funcionario.matricula,
             "nome" : e.Funcionario.nome,
             "empresa" : e.Funcionario.empresa,
-            "op" : e.Funcionario.Optante ? "Sim" : "Nao"
+            "op" : e.Funcionario.Optante ? "Sim" : "Nao",
+            "status" : e.finalizado,
+            "dt_entrada" : e.data_registro
         })
   
       });
-      const filePath = 'dados.xlsx';
+
+     // Formatar a data
+      const filePath = "registro_funcionario" + dataFormatada + ".xlsx";
       const buffer = await workbook.xlsx.writeBuffer();
       return buffer
 
@@ -49,7 +87,19 @@ rota.get("/", async (req,res) => {
     console.log("Usuario " + req.matricula + "Consultado Passagem" );
     try {
         console.log("CONSULTANDO REGISTRO PASSAGEM " + req.matricula);
-        const RESPOSTA = await consultando()
+        const RESPOSTA = await PASSAGEM.findAll({where : {
+        [Op.and] : [
+          {finalizado : null},
+       
+        ]
+        },
+         include : {
+          model : FUNCIONARIO,
+          attributes: ["matricula","nome","setor","cargo","empresa","Optante"]
+      },
+    }
+      
+    )
         
      
  
@@ -91,6 +141,7 @@ rota.post("/finalizar", async(req,res) =>{
     if(![2,3].includes(req.nivel)) return res.status(501).send({mensagem : "Permissao Negada"})
         try{
             const buffer = await CreatePlanilha()
+           
             let transporter = email.createTransport({
                 service: 'gmail',
                 auth: {
@@ -120,7 +171,7 @@ rota.post("/finalizar", async(req,res) =>{
                   console.log('Email enviado: ' + info.response);
                 }
               });
-            const atualizar = await PASSAGEM.update({finalizado : "Sim"}, {where : {finalizado : null}})
+            const atualizar = await PASSAGEM.update({finalizado : "PRESENTE"}, {where : {finalizado : null}})
             return res.status(200).send({messaagem : "Acho que deu bom"})
     
         }catch(erro){
