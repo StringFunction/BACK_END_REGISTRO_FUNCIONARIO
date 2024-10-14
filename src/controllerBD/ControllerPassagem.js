@@ -129,7 +129,7 @@ rota.post("/", async (req,res) => {
     }catch(erro) {
         if (erro.name === 'SequelizeUniqueConstraintError') {
             console.log('Erro: O funcionário já foi registrado hoje.');
-            return res.status(404).send({messaagem  :"O funcionário já foi registrado hoje."})
+            return res.status(302).send({messaagem  :"O funcionário já foi registrado hoje."})
           } else {
             console.log('Erro ao criar o registro de passagem:', erro);
           }
@@ -140,6 +140,13 @@ rota.post("/", async (req,res) => {
 rota.post("/finalizar", async(req,res) =>{
     if(![2,3].includes(req.nivel)) return res.status(501).send({mensagem : "Permissao Negada"})
         try{
+          const consultar = await PASSAGEM.findAll({where : {
+            finalizado : null
+          }})
+          console.log(consultar);
+          
+          
+          if (consultar.length > 0){
             const buffer = await CreatePlanilha()
            
             let transporter = email.createTransport({
@@ -164,7 +171,7 @@ rota.post("/finalizar", async(req,res) =>{
                 ],
               };
             
-              transporter.sendMail(mailOptions, (error, info) => {
+              await transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                   console.log('Erro ao enviar e-mail:', error);
                 } else {
@@ -173,6 +180,9 @@ rota.post("/finalizar", async(req,res) =>{
               });
             const atualizar = await PASSAGEM.update({finalizado : "PRESENTE"}, {where : {finalizado : null}})
             return res.status(200).send({messaagem : "Acho que deu bom"})
+          } else{
+            res.status(404).send({mensagem : "SEM REGISTRO PARA SERAM FINALIZADOS"})
+          }
     
         }catch(erro){
             console.log(erro);
