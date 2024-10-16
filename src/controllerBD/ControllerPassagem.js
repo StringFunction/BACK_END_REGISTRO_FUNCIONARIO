@@ -31,7 +31,7 @@ async function consultando() {
     })
     return RESPOSTA
 }
-async function PesquisandFuncinario(){
+async function addFuncionarioAusente(){
   const func = await FUNCIONARIO.findAll()
   const passagens = await PASSAGEM.findAll()
 
@@ -46,10 +46,22 @@ async function PesquisandFuncinario(){
       }
   })
 }
+function status(params) {
+  if (params == true) {
+    return "Sim"
+
+    
+  }else if(params == "frequentado"){
+    return "frequentado"
+  
+} else{
+    return "Nao"
+}
+}
 async function CreatePlanilha(){
     const workbook = new ExcelJS.Workbook()
     const sheet = workbook.addWorksheet("Registro_funcionario")
-    const j = await PesquisandFuncinario() 
+    const j = await addFuncionarioAusente() 
 
     const atualizar = await PASSAGEM.update({finalizado : "PRESENTE"}, {where : {finalizado : null}})
     const RESPOSTA = await consultando() 
@@ -69,7 +81,7 @@ async function CreatePlanilha(){
             "matricula" : e.Funcionario.matricula,
             "nome" : e.Funcionario.nome,
             "empresa" : e.Funcionario.empresa,
-            "op" : e.Funcionario.Optante ? "Sim" : "Nao",
+            "op" :status(e.Funcionario.Optante),
             "status" : e.finalizado,
             "dt_entrada" : e.data_registro
         })
