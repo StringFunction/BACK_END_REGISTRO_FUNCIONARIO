@@ -15,23 +15,20 @@ const PASSAGEM = conn.define("Passagens" , {
             model : FUNCIONARIO,
             key : "matricula"
         },
-        onDelete: 'CASCADE', // Exclui passagens ao deletar um funcionário
-        onUpdate: 'CASCADE'  // Atualiza passagens ao alterar a matrícula do funcionário
+        onDelete: 'CASCADE', 
+        onUpdate: 'CASCADE'  
 
     },
     data_registro: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: dataFormatada // Define apenas a data (YYYY-MM-DD)
+        defaultValue: dataFormatada 
     },
     finalizado : {
         type: DataTypes.STRING,
         allowNull: true
     },
-    // Process : {
-    //     type : DataTypes.STRING,
-    //     allowNull : true
-    // }
+
 }, 
 
     {
