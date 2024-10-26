@@ -132,7 +132,7 @@ rota.post("/", async (req,res) => {
 
         if (!!consultandoFuncionario) {
             const registrar = await PASSAGEM.create({funcionario_id : req.body.matricula})
-            return res.status(200).send({messaagem  : "Usuario registrado "})
+            return res.status(200).send(consultandoFuncionario)
             
         } else{
             return res.status(404).send({mensagem : "Funcionario nao encontrado"})
