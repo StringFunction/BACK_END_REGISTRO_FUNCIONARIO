@@ -11,4 +11,4 @@ function nivelAcesso(req, res,next){
 }
 
 app.use("/v1/usuario", vericarToken, Consulta)
-app.use("/v1/usuariodb", vericarToken, nivelAcesso, usuario)
+app.use("/v2/usuario", vericarToken, nivelAcesso, usuario)

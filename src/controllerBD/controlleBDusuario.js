@@ -47,20 +47,22 @@ rota.get("/", async(req, res) => {
 
 //CRIA UM NOVO USUARIO
 rota.post("/", async (req, res) =>{
-    const response = await usuario.create(req.body)
-    console.log(req.nivel);
-    
-    console.log("passei aqui do suario ");
-    
-    if (response) {
-        console.log("entrei dentro no");
-        
-       return res.status(201).send({mensagem : "usuario criado "})
-        
-    }else{
-        console.log("quia sou mais um dia");
-        return res.status(401).send({mensagem : "erro ao tenta cadastra novo usuario "})
+    try {
+
+        const consultandoUsuario = await usuario.findOne({where : {matricula : req.body.matricula}})
+        if (!!consultandoUsuario) return res.status(404).send({mensagem : "Matricula de usuario ja cadastrada!"})
+        const CriarUsuario = await usuario.create(req.body)
+        if (!!CriarUsuario) {
+            return res.status(200).send({mensagem : "usuario criado com sucesso!!"})
+        }
+
+    } catch(erro) {
+        console.log(erro);
+
+        return res.status(500).send({mensagem : "ERRO DO LADO DE SERVIDOR"})
+
     }
+
    
 })
 
@@ -85,20 +87,22 @@ rota.delete("/:matricula", async(req,res) => {
             return res.status(401).send({mensagem : "usuario n encontrado "})
         }
     }catch(erro){
+        console.log(erro);
         return res.status(401).send({mensagem : "erro no servidor "})
+        
     }
 })
 
 //ATUALIZA USUARIO DE ACORDO COMM MATRICULA
-rota.put("/user/:matricula", async(req,res) => {
+rota.put("/", async(req,res) => {
     try{
         const user =  await usuario.findOne({where : {
-            matricula : req.params.matricula
+            matricula : req.body.matricula
         }})
         console.log(user);
         
         if (user) {
-            const deletaUsuario = await usuario.update(req.body , {where : { matricula : req.params.matricula }})
+            const deletaUsuario = await usuario.update(req.body , {where : { matricula : req.body.matricula }})
             if(deletaUsuario){
                 return res.status(201).send({mensagem : "usuario atualizado"})
             }else{
