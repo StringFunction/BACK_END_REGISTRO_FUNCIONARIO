@@ -7,9 +7,10 @@ const express = require("express")
 const ExcelJS = require('exceljs');
 const data_atual = new Date();
 const dataFormatada = format(data_atual, 'yyyy-MM-dd'); //
+const dataFormatada2 = format(data_atual, 'dd-MM-yyyy'); //
 const rota = express.Router()
 const email =  require("nodemailer")
-
+const {SERVICE_EMAIL, USER,PASS,FROM,TO} = process.env
 
 async function consultando() {
     const RESPOSTA = await PASSAGEM.findAll({ include : {
@@ -162,21 +163,21 @@ rota.post("/finalizar", async(req,res) =>{
             const buffer = await CreatePlanilha()
            
             let transporter = email.createTransport({
-                service: 'gmail',
+                service: SERVICE_EMAIL,
                 auth: {
-                  user: 'cleciolimalive@gmail.com', // Seu email
-                  pass: 'jmqw egwg jafn chbp',           // Sua senha
+                  user: USER, // Seu email
+                  pass: PASS,           // Sua senha
                 },
               });
             
               let mailOptions = {
-                from: 'cleciolimalive@gmail.com',
-                to: 'franciscoclecioti@gmail.com',
+                from: FROM,
+                to: TO,
                 subject: 'Dados em Planilha',
                 text: 'Segue em anexo a planilha com os dados solicitados.',
                 attachments: [
                   {
-                    filename: 'dados.xlsx',
+                    filename: `planilha_registro_funcionario_${dataFormatada2}.xlsx`,
                     content: buffer, // Enviar o buffer como conteúdo
                     contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                   },
