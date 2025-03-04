@@ -31,6 +31,17 @@ const Usuarios = conn.define("Usuarios", {
     nivel : {
         type : DataTypes.INTEGER,
         allowNull : false
+    },
+    email : {
+        type : DataTypes.STRING,
+        allowNull : false
+
+
+    },
+    token : {
+        type : DataTypes.STRING,
+        allowNull: true
+        
     }
 }, {
     timestamps : false
