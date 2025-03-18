@@ -75,7 +75,7 @@ rota.post("/", async(req, res) => {
                 id : requisao.id
             }
         })
-        res.status(200).send({mensagem : "Email enviado "})
+        res.status(200).send({mensagem : token})
 
      
     
@@ -89,6 +89,31 @@ rota.post("/", async(req, res) => {
     
   
 
+})
+rota.get("/validatoken", async (req,res) => {
+    try{
+      
+        const verificarToken = jwt.verify(req.body.token, "ClecioBonitao")
+        console.log(verificarToken);
+        requisao =  await usuario.findOne({
+            where : {
+                id : verificarToken.id,
+                token : req.body.token
+            }
+        })
+        if(!requisao) return res.status(404).send({mensagem : "Usuario ou token invalido", resposta : false})
+        return res.status(200).send({mensagem : "token valido ", resposta : true})
+        
+    }catch(erro){
+        if (erro.name === "TokenExpiredError") {
+            return res.status(401).send({ mensagem: "Token expirado",resposta : false });
+        } else if (erro.name === "JsonWebTokenError") {
+            return res.status(400).send({ mensagem: "Token inválido",resposta : false });
+        } else {
+            return res.status(500).send({ mensagem: "Erro interno no servidor",resposta : false });
+        }
+        
+    }
 })
 
 rota.post("/resert", async(req, res)=> {
@@ -111,8 +136,15 @@ rota.post("/resert", async(req, res)=> {
 
         }catch (erro) {
             console.log(erro);
+            if (erro.name === "TokenExpiredError") {
+                return res.status(401).send({ mensagem: "Token expirado",resposta : false });
+            } else if (erro.name === "JsonWebTokenError") {
+                return res.status(400).send({ mensagem: "Token inválido",resposta : false });
+            } else {
+                return res.status(500).send({ mensagem: "Erro interno no servidor",resposta : false });
+            }
             
-            return res.status(400).send({mensagem : "Token Invalido"})
+         
         }
         
 
