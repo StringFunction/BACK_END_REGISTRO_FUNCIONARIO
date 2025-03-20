@@ -87,12 +87,16 @@ rota.post("/", async(req, res) => {
         return res.status(500).send({mensagem : "ERRO NO LADO DO SERVIDOR"})
     }
     
-  
+ 
+})                                                  
 
-})
-rota.get("/validatoken", async (req,res) => {
+rota.post("/validatoken", async (req,res) => {
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log("Maquina Solicitante " + ip);
+    
     try{
-      
+        console.log("Verificando Token");
+        console.log(req.body.token);
         const verificarToken = jwt.verify(req.body.token, "ClecioBonitao")
         console.log(verificarToken);
         requisao =  await usuario.findOne({
@@ -102,11 +106,13 @@ rota.get("/validatoken", async (req,res) => {
             }
         })
         if(!requisao) return res.status(404).send({mensagem : "Usuario ou token invalido", resposta : false})
+        console.log("Token valido");
+        
         return res.status(200).send({mensagem : "token valido ", resposta : true})
         
     }catch(erro){
         if (erro.name === "TokenExpiredError") {
-            return res.status(401).send({ mensagem: "Token expirado",resposta : false });
+            return res.status(401).send({ mensagem: "Token expirado",resposta : false });                                                           
         } else if (erro.name === "JsonWebTokenError") {
             return res.status(400).send({ mensagem: "Token inválido",resposta : false });
         } else {

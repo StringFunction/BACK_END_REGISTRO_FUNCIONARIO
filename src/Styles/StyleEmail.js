@@ -322,7 +322,7 @@ function BodyEmail (token){
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tbody>
                               <tr>
-                                <td> <a href="http://127.0.0.1:5500/teste.html/${token}" target="_blank">Redefinir</a> </td>
+                                <td> <a href="http://localhost:5173/ResertSenha/${token}" target="_blank">Redefinir</a> </td>
                               </tr>
                             </tbody>
                           </table>
